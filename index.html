@@ -369,6 +369,57 @@
 
     .act-cls-pill.on{background:linear-gradient(135deg,#8B5CF6,#EC4899)!important;color:#fff!important;border-color:#8B5CF6!important;box-shadow:0 4px 12px rgba(139,92,246,.35);transform:translateY(-1px)}
 .act-cls-pill:hover:not(.on){background:var(--bg3)!important;border-color:var(--purple)!important;color:var(--text)!important}
+
+/* ===== MOBILE RESPONSIVE FIXES ===== */
+@media (max-width: 640px) {
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  .page { padding: 14px 10px; max-width: 100%; }
+  header { padding: 8px 10px; gap: 8px; flex-wrap: wrap; }
+  .logo { font-size: 13px; }
+  header nav { width: 100%; order: 3; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-btn { padding: 7px 10px; font-size: 12px; }
+  .conn-area { order: 2; }
+  .conn-label { display: none; }
+  .stats { grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap: 8px; margin-bottom: 16px; }
+  .stat-card { padding: 10px 12px; }
+  .stat-value { font-size: 19px; }
+  .form-row { padding: 12px; gap: 8px; }
+  .ff { min-width: 100%; flex: 1 1 100%; }
+  .search-input { width: 100%; }
+  .modal { width: 100%; max-width: 100vw; padding: 18px; border-radius: 0; }
+  .card-header { flex-wrap: wrap; gap: 8px; }
+  .cc-grid, .cc-quick { grid-template-columns: 1fr; }
+  .cc-title { font-size: 19px; }
+  .cc-card-value { font-size: 26px; }
+  .sp-stats { grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); }
+  .sp-name { font-size: 19px; }
+  .sp-header { padding: 16px; }
+  .contact-info { grid-template-columns: 1fr; }
+  .card, .acls-block, .room-card, .surv-session, .msg-template, .exam-card, .dst-table, .gr-table, .att-tbl, .sch-grid, .sp-table {
+    max-width: 100%;
+  }
+  .card > *, .acls-block, .tbl-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table { font-size: 12px; }
+  .sch-grid, .att-tbl, .dst-table, .gr-table, .sp-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  .sch-grid thead, .sch-grid tbody, .sch-grid tr,
+  .att-tbl thead, .att-tbl tbody, .att-tbl tr,
+  .dst-table thead, .dst-table tbody, .dst-table tr,
+  .gr-table thead, .gr-table tbody, .gr-table tr,
+  .sp-table thead, .sp-table tbody, .sp-table tr { display: table; width: 100%; }
+  .sch-cell { height: 52px; }
+  .room-list { grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
+  .dst-toolbar, .gr-toolbar, .sup-toolbar { padding: 10px 12px; }
+  #wa-toast { left: 10px; right: 10px; max-width: none; bottom: 12px; }
+  .nav-dropdown-menu { min-width: 160px; }
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
