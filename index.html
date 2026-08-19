@@ -369,57 +369,6 @@
 
     .act-cls-pill.on{background:linear-gradient(135deg,#8B5CF6,#EC4899)!important;color:#fff!important;border-color:#8B5CF6!important;box-shadow:0 4px 12px rgba(139,92,246,.35);transform:translateY(-1px)}
 .act-cls-pill:hover:not(.on){background:var(--bg3)!important;border-color:var(--purple)!important;color:var(--text)!important}
-
-/* ===== MOBILE RESPONSIVE FIXES ===== */
-@media (max-width: 640px) {
-  html, body { overflow-x: hidden; max-width: 100vw; }
-  .page { padding: 14px 10px; max-width: 100%; }
-  header { padding: 8px 10px; gap: 8px; flex-wrap: wrap; }
-  .logo { font-size: 13px; }
-  header nav { width: 100%; order: 3; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .nav-btn { padding: 7px 10px; font-size: 12px; }
-  .conn-area { order: 2; }
-  .conn-label { display: none; }
-  .stats { grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap: 8px; margin-bottom: 16px; }
-  .stat-card { padding: 10px 12px; }
-  .stat-value { font-size: 19px; }
-  .form-row { padding: 12px; gap: 8px; }
-  .ff { min-width: 100%; flex: 1 1 100%; }
-  .search-input { width: 100%; }
-  .modal { width: 100%; max-width: 100vw; padding: 18px; border-radius: 0; }
-  .card-header { flex-wrap: wrap; gap: 8px; }
-  .cc-grid, .cc-quick { grid-template-columns: 1fr; }
-  .cc-title { font-size: 19px; }
-  .cc-card-value { font-size: 26px; }
-  .sp-stats { grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); }
-  .sp-name { font-size: 19px; }
-  .sp-header { padding: 16px; }
-  .contact-info { grid-template-columns: 1fr; }
-  .card, .acls-block, .room-card, .surv-session, .msg-template, .exam-card, .dst-table, .gr-table, .att-tbl, .sch-grid, .sp-table {
-    max-width: 100%;
-  }
-  .card > *, .acls-block, .tbl-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  table { font-size: 12px; }
-  .sch-grid, .att-tbl, .dst-table, .gr-table, .sp-table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-  }
-  .sch-grid thead, .sch-grid tbody, .sch-grid tr,
-  .att-tbl thead, .att-tbl tbody, .att-tbl tr,
-  .dst-table thead, .dst-table tbody, .dst-table tr,
-  .gr-table thead, .gr-table tbody, .gr-table tr,
-  .sp-table thead, .sp-table tbody, .sp-table tr { display: table; width: 100%; }
-  .sch-cell { height: 52px; }
-  .room-list { grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
-  .dst-toolbar, .gr-toolbar, .sup-toolbar { padding: 10px 12px; }
-  #wa-toast { left: 10px; right: 10px; max-width: none; bottom: 12px; }
-  .nav-dropdown-menu { min-width: 160px; }
-}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -599,6 +548,7 @@
       
       
       
+      <button class="nav-btn" onclick="showPage('command')" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:800">🏠 الرئيسية</button>
       <div class="nav-dropdown">
         <button class="nav-btn" id="students-dropdown-btn" onclick="toggleStudentsMenu(event)">👩‍🎓 التلاميذ ▾</button>
         <div class="nav-dropdown-menu" id="students-dropdown-menu">
@@ -738,6 +688,14 @@
   <div class="cc-header">
     <div class="cc-title">🎯 Command Center</div>
     <div class="cc-sub">نظرة شاملة على نشاط المؤسسة — المؤشرات تتحدث في الوقت الفعلي</div>
+  </div>
+
+  <div class="card" style="padding:14px;margin-bottom:14px;background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(59,130,246,.04))">
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="font-size:20px">🔍</span>
+      <input type="text" id="global-search" placeholder="ابحث في التلاميذ، الأساتذة، الأولياء، الحصص..." oninput="_globalSearch(this.value)" style="flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:Cairo,sans-serif;font-weight:700;font-size:14px"/>
+    </div>
+    <div id="search-results" style="margin-top:10px"></div>
   </div>
 
   <div class="cc-grid">
@@ -24349,6 +24307,79 @@ function clearViewOnly() {
   document.getElementById('gs-teachers-body').innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted)">— العرض مُفرَّغ. الحصص محفوظة في السحاب. اضغط F5 لإعادتها —</div>';
 }
 window.clearViewOnly = clearViewOnly;
+
+
+function _globalSearch(q) {
+  var res = document.getElementById('search-results');
+  q = (q||'').trim().toLowerCase();
+  if (!q) { res.innerHTML = ''; return; }
+  var found = [];
+  // 1) التلاميذ
+  (students||[]).forEach(function(s){
+    var name = (s.name||'').toLowerCase();
+    if (name.includes(q) || (s.massar_code||'').toLowerCase().includes(q)) {
+      found.push({type:'👨‍🎓 تلميذ', label:s.name + ' — ' + (s.class||''), sub:s.massar_code||'', pageId:'students', filterName: s.name});
+    }
+  });
+  // 2) الأساتذة
+  (teachers||[]).forEach(function(t){
+    var name = (t.name||'').toLowerCase();
+    if (name.includes(q) || (t.subject||'').toLowerCase().includes(q)) {
+      found.push({type:'👨‍🏫 أستاذ', label:t.name + ' — ' + (t.subject||''), sub:t.phone||'', pageId:'teachers-list', filterName: t.name});
+    }
+  });
+  // 3) الأولياء (من الجدول guardians إن كان مُحمَّلاً)
+  if (typeof guardians !== 'undefined' && guardians) {
+    guardians.forEach(function(g){
+      var name = (g.guardian_name||'').toLowerCase();
+      if (name.includes(q)) {
+        found.push({type:'👨‍👩‍👧 وليّ', label:g.guardian_name + ' — ولي ' + (g.student_name||''), sub:g.guardian_phone||'', pageId:'guardians', filterName:g.guardian_name});
+      }
+    });
+  }
+  // 4) الحصص (schedule)
+  (scheduleSlots||[]).forEach(function(s){
+    if ((s.subject||'').toLowerCase().includes(q) || (s.class_name||'').toLowerCase().includes(q) || (s.teacher_name||'').toLowerCase().includes(q)) {
+      found.push({type:'📅 حصة', label:(s.subject||'')+' — '+(s.class_name||''), sub:(s.teacher_name||''), pageId:'schedule-generator'});
+    }
+  });
+  // 5) صفحات ومكونات التطبيق
+  var pages = [
+    {id:'command', name:'🎯 لوحة التحكم', keywords:'command dashboard رئيسية'},
+    {id:'students', name:'👨‍🎓 لوائح التلاميذ', keywords:'تلميذ طالب students'},
+    {id:'absences', name:'📋 الغيابات', keywords:'غياب absent'},
+    {id:'guardians', name:'👨‍👩‍👧 الأولياء', keywords:'ولي parent guardian'},
+    {id:'teachers-list', name:'👨‍🏫 لوائح الأساتذة', keywords:'أستاذ teacher'},
+    {id:'teacher-absences', name:'📋 غيابات الأساتذة', keywords:'غياب أستاذ'},
+    {id:'schedule-generator', name:'📅 إنشاء استعمال الزمن', keywords:'جدول زمن schedule timetable'},
+    {id:'nonpermanent-teachers', name:'📌 الأساتذة غير القارّين', keywords:'غير قار'},
+    {id:'permanent-teachers', name:'👑 الأساتذة القارّين', keywords:'قار permanent'},
+    {id:'grades', name:'📊 المعدلات والنقط', keywords:'معدل نقطة grade'},
+    {id:'director', name:'👔 لوحة المدير', keywords:'مدير director'},
+    {id:'mail-outgoing', name:'📤 البريد الصادر', keywords:'صادر mail'},
+    {id:'mail-incoming', name:'📥 البريد الوارد', keywords:'وارد mail'},
+    {id:'diagnosis', name:'🩺 تشخيص التعثرات', keywords:'تعثر دعم'},
+    {id:'fees', name:'💰 الأداءات', keywords:'دفع fees'},
+    {id:'homework', name:'📝 الفروض', keywords:'فرض homework'},
+    {id:'admissions', name:'📥 التسجيلات', keywords:'تسجيل admission'},
+    {id:'rewards', name:'🏆 المكافآت', keywords:'مكافأة reward'},
+    {id:'safety', name:'🛡 السلامة', keywords:'سلامة safety'}
+  ];
+  pages.forEach(function(p){
+    var text = (p.name + ' ' + p.keywords).toLowerCase();
+    if (text.includes(q)) {
+      found.push({type:'📄 صفحة', label:p.name, sub:'اضغط للانتقال', pageId:p.id});
+    }
+  });
+  if (!found.length) { res.innerHTML = '<div style="padding:16px;text-align:center;color:var(--text-muted)">لا نتائج لـ "'+q+'"</div>'; return; }
+  var html = '<div style="font-weight:800;margin-bottom:8px;color:var(--purple);font-size:13px">'+found.length+' نتيجة</div>';
+  found.slice(0, 30).forEach(function(f){
+    var handler = f.onclick ? f.onclick : (f.pageId ? "showPage('"+f.pageId+"')" : ''); html += '<div onclick="'+handler+'" style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:12px;cursor:'+(handler?'pointer':'default')+'" onmouseover="this.style.background=\'var(--bg3)\'" onmouseout="this.style.background=\'transparent\'"><div><span style="background:var(--bg3);padding:2px 8px;border-radius:6px;font-weight:800;font-size:11px">'+f.type+'</span> <span style="font-weight:800;margin-right:8px">'+f.label+'</span></div><div style="color:var(--text-muted);font-size:11px">'+f.sub+'</div></div>';
+  });
+  if (found.length > 30) html += '<div style="text-align:center;padding:8px;color:var(--text-muted);font-size:11px">... و '+(found.length-30)+' أخرى</div>';
+  res.innerHTML = html;
+}
+window._globalSearch = _globalSearch;
 
 </script>
 
