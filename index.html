@@ -15,32 +15,33 @@
   <title>صوفيا للتعليم المدرسي الخصوصي — إدارة المدرسة</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
     :root {
-      --bg:#0A0B14; --bg2:#13141F; --bg3:#1C1E2E; --border:#2A2D44;
-      --green:#10B981; --green-dim:rgba(16,185,129,.15);
-      --purple:#8B5CF6; --purple-dim:rgba(139,92,246,.15);
-      --pink:#EC4899; --pink-dim:rgba(236,72,153,.15);
-      --orange:#F59E0B; --orange-dim:rgba(245,158,11,.15);
-      --blue:#3B82F6; --blue-dim:rgba(59,130,246,.15);
-      --text:#E8EDF5; --text-muted:#8896B0;
-      --red:#E24B4A; --red-dim:#E24B4A18;
-      --yellow:#F1C40F; --yellow-dim:#F1C40F18;
-      --blue:#4A9EFF; --blue-dim:#4A9EFF18;
-      --radius:10px;
+      --bg:#0A0B12; --bg2:#141621; --bg3:#1D2032; --border:#282B40;
+      --green:#12C48B; --green-dim:rgba(18,196,139,.14);
+      --purple:#9764FF; --purple-dim:rgba(151,100,255,.14);
+      --pink:#F0529E; --pink-dim:rgba(240,82,158,.14);
+      --orange:#F5A623; --orange-dim:rgba(245,166,35,.14);
+      --blue:#4A9EFF; --blue-dim:rgba(74,158,255,.14);
+      --text:#EEF1F8; --text-muted:#8E9AB4;
+      --red:#F0555A; --red-dim:rgba(240,85,90,.14);
+      --yellow:#F1C40F; --yellow-dim:rgba(241,196,15,.14);
+      --radius:12px;
+      --shadow-sm:0 2px 8px rgba(0,0,0,.25);
+      --shadow-md:0 8px 24px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;direction:rtl;}
+    body{font-family:'Cairo',sans-serif;background:var(--bg);background-image:radial-gradient(circle at 15% 0%, rgba(151,100,255,.07), transparent 45%),radial-gradient(circle at 85% 15%, rgba(240,82,158,.05), transparent 40%);color:var(--text);min-height:100vh;direction:rtl;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;letter-spacing:.1px;}
 
     /* HEADER */
-    header{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;flex-wrap:nowrap;}
+    header{background:rgba(20,22,33,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 26px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;flex-wrap:nowrap;box-shadow:var(--shadow-sm);}
     header nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex:1;justify-content:flex-end;}
-    .logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;flex-shrink:0;}
-    .logo span{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-size:10px;font-weight:700;padding:3px 7px;border-radius:5px;font-family:'IBM Plex Mono',monospace;}
+    .logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;flex-shrink:0;letter-spacing:.2px;}
+    .logo span{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;font-family:'IBM Plex Mono',monospace;box-shadow:0 2px 8px rgba(151,100,255,.35);}
     nav{display:flex;flex-direction:row;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;}
-    .nav-btn{background:transparent;border:none;color:var(--text-muted);padding:8px 14px;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
-    .nav-btn:hover{background:var(--bg3);color:var(--text);}
-    .nav-btn.active{background:linear-gradient(135deg,var(--purple-dim),var(--pink-dim));color:var(--purple);font-weight:700;border:1px solid var(--purple);}
+    .nav-btn{background:transparent;border:none;color:var(--text-muted);padding:9px 15px;border-radius:9px;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;transition:all 0.18s ease;white-space:nowrap;}
+    .nav-btn:hover{background:var(--bg3);color:var(--text);transform:translateY(-1px);}
+    .nav-btn.active{background:linear-gradient(135deg,var(--purple-dim),var(--pink-dim));color:var(--purple);font-weight:700;border:1px solid var(--purple);box-shadow:0 2px 10px rgba(151,100,255,.2);}
     .conn-area{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 
     @media (max-width: 900px) {
@@ -57,26 +58,28 @@
     .hbtn.success{color:var(--green);border-color:var(--green);background:var(--green-dim);}
 
     /* PAGES */
-    .page{display:none;max-width:980px;margin:0 auto;padding:24px 20px;}
-    .page.active{display:block;}
+    .page{display:none;max-width:1000px;margin:0 auto;padding:28px 22px;}
+    .page.active{display:block;animation:pageIn .25s ease;}
+    @keyframes pageIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
     /* CONFIG BANNER */
     #config-banner{background:#1A1500;border-bottom:1px solid #3D2E00;padding:9px 24px;font-size:13px;color:#B8860B;}
     #config-banner.hidden{display:none;}
 
     /* STATS */
-    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px;}
-    .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;}
-    .stat-label{font-size:11px;color:var(--text-muted);margin-bottom:5px;font-family:'IBM Plex Mono',monospace;}
-    .stat-value{font-size:24px;font-weight:700;color:var(--green);}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px;}
+    .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-sm);transition:transform .18s ease,border-color .18s ease;}
+    .stat-card:hover{transform:translateY(-2px);border-color:var(--purple);}
+    .stat-label{font-size:11px;color:var(--text-muted);margin-bottom:6px;font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;}
+    .stat-value{font-size:25px;font-weight:800;color:var(--green);}
     .stat-value.red{color:var(--red);}
     .stat-value.yellow{color:var(--yellow);}
     .stat-value.blue{color:var(--blue);}
 
     /* CARD */
-    .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:18px;}
-    .card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
-    .card-title{font-size:14px;font-weight:700;}
+    .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:18px;box-shadow:var(--shadow-sm);}
+    .card-header{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid var(--border);}
+    .card-title{font-size:14px;font-weight:700;letter-spacing:.1px;}
 
     /* FORM ROW */
     .form-row{display:flex;gap:10px;flex-wrap:wrap;padding:16px 18px;align-items:flex-end;}
@@ -88,18 +91,19 @@
     .ff textarea{resize:vertical;min-height:60px;}
 
     /* BUTTONS */
-    .btn{border-radius:7px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Cairo',sans-serif;transition:all .2s;border:none;}
+    .btn{border-radius:8px;padding:9px 19px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Cairo',sans-serif;transition:all .18s ease;border:none;}
+    .btn:hover{transform:translateY(-1px);}
     .btn-green{background:var(--green-dim);color:var(--green);border:1px solid var(--green);}
-    .btn-green:hover{background:var(--green);color:#0F1117;}
+    .btn-green:hover{background:var(--green);color:#0F1117;box-shadow:0 4px 14px rgba(18,196,139,.3);}
     .btn-red{background:var(--red-dim);color:var(--red);border:1px solid var(--red);}
-    .btn-red:hover{background:var(--red);color:#fff;}
+    .btn-red:hover{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(240,85,90,.3);}
     .btn-blue{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue);}
-    .btn-blue:hover{background:var(--blue);color:#fff;}
-    .btn-primary{background:var(--green);color:#0F1117;border:none;}
-    .btn-primary:hover{opacity:.85;}
+    .btn-blue:hover{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(74,158,255,.3);}
+    .btn-primary{background:linear-gradient(135deg,var(--green),#0EA876);color:#0F1117;border:none;}
+    .btn-primary:hover{opacity:.9;box-shadow:0 4px 14px rgba(18,196,139,.3);}
     .btn-secondary{background:transparent;color:var(--text-muted);border:1px solid var(--border);}
     .btn-secondary:hover{background:var(--bg3);}
-    .btn:disabled{opacity:.4;cursor:not-allowed;}
+    .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
 
     /* TABLE */
     .tbl-wrap{overflow-x:auto;}
@@ -138,7 +142,7 @@
     /* MODAL */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;z-index:200;}
     .modal-overlay.hidden{display:none;}
-    .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:26px;width:500px;max-width:95vw;}
+    .modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:26px;width:500px;max-width:95vw;box-shadow:var(--shadow-md);}
     .modal h2{font-size:17px;font-weight:700;margin-bottom:6px;}
     .modal p{font-size:13px;color:var(--text-muted);margin-bottom:18px;line-height:1.6;}
     .modal label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:5px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.05em;}
@@ -215,8 +219,8 @@
     .cc-title { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
     .cc-sub { font-size: 13px; color: var(--text-muted); }
     .cc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .cc-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; transition: all .2s; position: relative; overflow: hidden; }
-    .cc-card:hover { transform: translateY(-2px); border-color: var(--purple); }
+    .cc-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; transition: all .2s; position: relative; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .cc-card:hover { transform: translateY(-2px); border-color: var(--purple); box-shadow: var(--shadow-md); }
     .cc-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
     .cc-card-label { font-size: 13px; color: var(--text-muted); font-weight: 500; }
     .cc-card-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
@@ -369,65 +373,84 @@
 
     .act-cls-pill.on{background:linear-gradient(135deg,#8B5CF6,#EC4899)!important;color:#fff!important;border-color:#8B5CF6!important;box-shadow:0 4px 12px rgba(139,92,246,.35);transform:translateY(-1px)}
 .act-cls-pill:hover:not(.on){background:var(--bg3)!important;border-color:var(--purple)!important;color:var(--text)!important}
+
+/* ===== MOBILE RESPONSIVE FIXES ===== */
+@media (max-width: 640px) {
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  .page { padding: 14px 10px; max-width: 100%; }
+  header { padding: 8px 10px; gap: 8px; flex-wrap: wrap; }
+  .logo { font-size: 13px; }
+  header nav { width: 100%; order: 3; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .nav-btn { padding: 7px 10px; font-size: 12px; }
+  .conn-area { order: 2; }
+  .conn-label { display: none; }
+  .stats { grid-template-columns: repeat(auto-fit, minmax(110px,1fr)); gap: 8px; margin-bottom: 16px; }
+  .stat-card { padding: 10px 12px; }
+  .stat-value { font-size: 19px; }
+  .form-row { padding: 12px; gap: 8px; }
+  .ff { min-width: 100%; flex: 1 1 100%; }
+  .search-input { width: 100%; }
+  .modal { width: 100%; max-width: 100vw; padding: 18px; border-radius: 0; }
+  .card-header { flex-wrap: wrap; gap: 8px; }
+  .cc-grid, .cc-quick { grid-template-columns: 1fr; }
+  .cc-title { font-size: 19px; }
+  .cc-card-value { font-size: 26px; }
+  .sp-stats { grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); }
+  .sp-name { font-size: 19px; }
+  .sp-header { padding: 16px; }
+  .contact-info { grid-template-columns: 1fr; }
+  .card, .acls-block, .room-card, .surv-session, .msg-template, .exam-card, .dst-table, .gr-table, .att-tbl, .sch-grid, .sp-table {
+    max-width: 100%;
+  }
+  .card > *, .acls-block, .tbl-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table { font-size: 12px; }
+  .sch-grid, .att-tbl, .dst-table, .gr-table, .sp-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  .sch-grid thead, .sch-grid tbody, .sch-grid tr,
+  .att-tbl thead, .att-tbl tbody, .att-tbl tr,
+  .dst-table thead, .dst-table tbody, .dst-table tr,
+  .gr-table thead, .gr-table tbody, .gr-table tr,
+  .sp-table thead, .sp-table tbody, .sp-table tr { display: table; width: 100%; }
+  .sch-cell { height: 52px; }
+  .room-list { grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); }
+  .dst-toolbar, .gr-toolbar, .sup-toolbar { padding: 10px 12px; }
+  #wa-toast { left: 10px; right: 10px; max-width: none; bottom: 12px; }
+  .nav-dropdown-menu { min-width: 160px; }
+  #global-search-wrap { width: 100%; order: 1; }
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
 <!-- ══ شاشة تسجيل الدخول ══ -->
-<div id="login-screen" style="display:none">
-  <div style="background:rgba(255,255,255,.04);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:36px;max-width:440px;width:100%;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.4)">
+<div id="login-screen" style="display:none;position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 30% 20%, rgba(139,92,246,.25), transparent 50%), #0A0B14;align-items:center;justify-content:center;padding:20px">
+  <div style="background:rgba(255,255,255,.04);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:36px;max-width:400px;width:100%;backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.4)">
     <div style="text-align:center;margin-bottom:28px">
       <div style="width:84px;height:84px;background:linear-gradient(135deg,#8B5CF6,#EC4899);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:42px;margin-bottom:12px;box-shadow:0 8px 24px rgba(139,92,246,.35)">🎓</div>
       <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:.5px">صوفيا للتعليم المدرسي الخصوصي</div>
-      
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">اسم المستخدم :</label>
+      <input type="text" id="login-user" placeholder="أدخل اسم المستخدم" autocomplete="username" onkeypress="if(event.key==='Enter')document.getElementById('login-pwd').focus()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px"/>
     </div>
 
     <div style="margin-bottom:18px">
-      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:8px;font-weight:600">اختر دورك :</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button onclick="selectRole('admin', this)" data-role="admin" class="role-btn" style="background:rgba(139,92,246,.15);border:1.5px solid rgba(139,92,246,.4);color:#fff;padding:14px 8px;border-radius:10px;cursor:pointer;font-family:Cairo,sans-serif;font-weight:700;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s">
-          <span style="font-size:24px">👔</span>
-          <span>المدير</span>
-        </button>
-        <button onclick="selectRole('supervisor', this)" data-role="supervisor" class="role-btn" style="background:rgba(245,158,11,.1);border:1.5px solid rgba(245,158,11,.3);color:#fff;padding:14px 8px;border-radius:10px;cursor:pointer;font-family:Cairo,sans-serif;font-weight:700;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s">
-          <span style="font-size:24px">👁️</span>
-          <span>المراقب العام</span>
-        </button>
-        <button onclick="selectRole('teacher', this)" data-role="teacher" class="role-btn" style="background:rgba(59,130,246,.1);border:1.5px solid rgba(59,130,246,.3);color:#fff;padding:14px 8px;border-radius:10px;cursor:pointer;font-family:Cairo,sans-serif;font-weight:700;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s">
-          <span style="font-size:24px">👨‍🏫</span>
-          <span>أستاذ</span>
-        </button>
-        <button onclick="selectRole('parent', this)" data-role="parent" class="role-btn" style="background:rgba(16,185,129,.1);border:1.5px solid rgba(16,185,129,.3);color:#fff;padding:14px 8px;border-radius:10px;cursor:pointer;font-family:Cairo,sans-serif;font-weight:700;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s">
-          <span style="font-size:24px">👨‍👩‍👧</span>
-          <span>ولي أمر</span>
-        </button>
-      </div>
-    </div>
-
-    <div id="teacher-select-wrap" style="display:none;margin-bottom:14px">
-      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">📧 البريد الإلكتروني :</label>
-      <input type="email" id="teacher-email-input" placeholder="prof@example.com" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:10px;color:#fff;font-family:Cairo,sans-serif;font-size:13px;direction:ltr;text-align:left"/>
-    </div>
-
-    <div id="parent-input-wrap" style="display:none;margin-bottom:14px">
-      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">رقم مسار ابنك(تك) :</label>
-      <input type="text" id="parent-massar" placeholder="مثلاً G123456789" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:10px;color:#fff;font-family:Cairo,sans-serif;font-size:13px"/>
-    </div>
-
-    <div style="margin-bottom:18px">
-      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">رمز المرور :</label>
-      <input type="password" id="login-pwd" placeholder="أدخل رمز المرور" onkeypress="if(event.key==='Enter')doLogin()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px;letter-spacing:2px"/>
+      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">كلمة السر :</label>
+      <input type="password" id="login-pwd" placeholder="أدخل كلمة السر" autocomplete="current-password" onkeypress="if(event.key==='Enter')doLogin()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px;letter-spacing:2px"/>
     </div>
 
     <button onclick="doLogin()" id="login-btn" style="width:100%;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;padding:13px;border-radius:10px;font-family:Cairo,sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,.35)">🔐 دخول</button>
 
     <div id="login-err" style="margin-top:12px;padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;color:#fca5a5;font-size:12px;text-align:center;display:none"></div>
-
-    <div style="margin-top:20px;text-align:center;font-size:10px;color:#6b7280;line-height:1.6">
-      <div>📌 الرموز الافتراضية: <strong style="color:#a78bfa">admin123</strong> (المدير) · <strong style="color:#fbbf24">sup123</strong> (المراقب) · <strong style="color:#60a5fa">teacher</strong> (الأستاذ) · <strong style="color:#34d399">parent</strong> (ولي الأمر)</div>
-      <div style="margin-top:6px;color:#475569">يمكن تغيير الرموز من الإعدادات بعد الدخول</div>
-    </div>
   </div>
 </div>
 
@@ -529,6 +552,12 @@
 <!-- HEADER -->
 <div class="conn-area" style="display:flex;align-items:center;gap:12px;padding:8px 18px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:51">
   <div style="flex:1;font-size:14px;font-weight:900;color:var(--text)">صوفيا للتعليم المدرسي الخصوصي</div>
+  <div id="global-search-wrap" style="position:relative;width:220px;flex-shrink:0">
+    <input type="text" id="global-search-input" placeholder="🔍 بحث سريع (تلميذ/أستاذ)..." autocomplete="off"
+      oninput="globalSearchDebounced()"
+      style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:7px 12px;color:var(--text);font-size:12px;font-family:'Cairo',sans-serif;outline:none;transition:border-color .2s" />
+    <div id="global-search-results"></div>
+  </div>
   <select id="global-year" onchange="onGlobalYearChange()" title="الموسم الدراسي (يُطبق على المعدلات)" style="background:linear-gradient(135deg,#7c3aed,#a855f7);border:none;color:#fff;font-family:Cairo,sans-serif;font-weight:800;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px">
     <option value="2025-2026">📅 2025-2026</option>
     <option value="2024-2025">📅 2024-2025</option>
@@ -539,15 +568,16 @@
   <button class="hbtn" onclick="document.getElementById('config-modal').classList.remove('hidden')" style="margin-right:4px">⚙</button>
   <button class="hbtn success" onclick="openImport()">📥 استيراد</button>
   <button class="hbtn danger" onclick="confirmDeleteAll()">🗑 حذف الكل</button>
+  <button class="hbtn" onclick="siteLogout()" title="تسجيل الخروج">🚪 خروج</button>
 </div>
 <header>
-  <div class="logo"><span>SF</span></div>
+  <div class="logo" onclick="showPage('command')" style="cursor:pointer" title="الرئيسية"><span>SF</span></div>
   <nav>
-      
 
-      
-      
-      
+
+
+
+
       <button class="nav-btn" onclick="showPage('command')" style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:800">🏠 الرئيسية</button>
       <div class="nav-dropdown">
         <button class="nav-btn" id="students-dropdown-btn" onclick="toggleStudentsMenu(event)">👩‍🎓 التلاميذ ▾</button>
@@ -1162,6 +1192,7 @@ function showPage(name) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   if (event && event.currentTarget) event.currentTarget.classList.add('active');
+  if (name === 'command') { setTimeout(loadCommandCenter, 50); }
   if (name === 'absences') { populateClassFilter(); }
   if (name === 'guardians') { loadGuardians(); }
   if (name === 'parent') { Promise.all([loadCcGradesFromCloud(), typeof loadAbsences==='function'?loadAbsences():Promise.resolve(), typeof loadStudents==='function'?loadStudents():Promise.resolve(), typeof loadGuardians==='function'?loadGuardians():Promise.resolve()]).then(function(){ renderParentPortal(); }); }
@@ -1457,12 +1488,60 @@ function showTeachersPageFromMenu(name, e) {
 }
 
 // إغلاق القائمة عند الضغط خارجها
-document.addEventListener('click', function() {
+document.addEventListener('click', function(e) {
   var m = document.getElementById('students-dropdown-menu');
   if (m) m.classList.remove('open');
   var tm = document.getElementById('teachers-dropdown-menu');
   if (tm) tm.classList.remove('open');
+  var gsWrap = document.getElementById('global-search-wrap');
+  if (gsWrap && !gsWrap.contains(e.target)) {
+    var gsRes = document.getElementById('global-search-results');
+    if (gsRes) gsRes.innerHTML = '';
+  }
 });
+
+// ══════════════════════════════════════════════════════
+// GLOBAL HEADER SEARCH (تلاميذ + أساتذة)
+// ══════════════════════════════════════════════════════
+let _globalSearchTimer = null;
+function globalSearchDebounced() {
+  clearTimeout(_globalSearchTimer);
+  _globalSearchTimer = setTimeout(_runGlobalSearch, 150);
+}
+function _runGlobalSearch() {
+  const box = document.getElementById('global-search-results');
+  const q = document.getElementById('global-search-input').value.trim().toLowerCase();
+  if (!q) { box.innerHTML = ''; return; }
+
+  const stuMatches = (typeof students !== 'undefined' && students ? students : [])
+    .filter(s => (s.name||'').toLowerCase().includes(q) || (s.massar||'').toLowerCase().includes(q))
+    .slice(0, 5)
+    .map(s => ({ kind: 'طالب', icon: '👩‍🎓', label: s.name, sub: (s.class||'') + (s.massar ? ' · ' + s.massar : ''), action: "openStudentProfile('" + s.id + "')" }));
+
+  const teaMatches = (typeof teachers !== 'undefined' && teachers ? teachers : [])
+    .filter(t => (t.name||'').toLowerCase().includes(q) || (t.subject||'').toLowerCase().includes(q))
+    .slice(0, 5)
+    .map(t => ({ kind: 'أستاذ', icon: '👨‍🏫', label: t.name, sub: t.subject || '', action: "openTeacherProfile('" + t.id + "')" }));
+
+  const results = stuMatches.concat(teaMatches);
+
+  if (!results.length) {
+    box.innerHTML = '<div style="position:absolute;z-index:200;background:var(--bg2);border:1px solid var(--border);border-radius:8px;width:100%;margin-top:4px;padding:10px 12px;font-size:12px;color:var(--text-muted)">لا نتائج</div>';
+    return;
+  }
+
+  box.innerHTML = '<div style="position:absolute;z-index:200;background:var(--bg2);border:1px solid var(--border);border-radius:8px;width:260px;left:0;box-shadow:0 8px 24px rgba(0,0,0,.4);margin-top:4px;max-height:320px;overflow-y:auto">' +
+    results.map(r => `
+      <div onclick="${r.action}; document.getElementById('global-search-input').value=''; document.getElementById('global-search-results').innerHTML='';"
+        style="padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;transition:background .15s"
+        onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">
+        <span style="font-size:16px">${r.icon}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.label}</div>
+          <div style="font-size:10px;color:var(--text-muted);font-family:'IBM Plex Mono',monospace">${r.kind}${r.sub ? ' · ' + r.sub : ''}</div>
+        </div>
+      </div>`).join('') + '</div>';
+}
 
 // ══════════════════════════════════════════════════════
 // SUPABASE
@@ -1483,13 +1562,25 @@ function initSupabase() {
 }
 
 async function loadAll() {
-  await loadStudents();
-  await loadAbsences();
-  loadGuardians().catch(() => {});
-  await loadTeachers().catch(() => { setTeacherStatus('⚠ جدول الأساتذة غير موجود — نفّذ SQL أولاً', 'err'); });
-  loadTeacherAbsences().catch(() => {});
-  loadSchedule().catch(() => {});
-  loadCahier().catch(() => {});
+  // كانت هذه الاستدعاءات تُنفَّذ الواحد تلو الآخر (كل طلب ينتظر انتهاء الذي قبله)،
+  // مما يجعل التحميل بطيئاً خصوصاً على شبكة ضعيفة. الآن تُنفَّذ كلها بالتوازي
+  // (نفس عدد الطلبات، لكن في نفس الوقت) فيصبح وقت التحميل الكلي = أطول طلب واحد
+  // بدل مجموع كل الطلبات.
+  await Promise.all([
+    loadStudents(),
+    loadAbsences(),
+    loadGuardians().catch(() => {}),
+    loadTeachers().catch(() => { setTeacherStatus('⚠ جدول الأساتذة غير موجود — نفّذ SQL أولاً', 'err'); }),
+    loadTeacherAbsences().catch(() => {}),
+    loadSchedule().catch(() => {}),
+    loadCahier().catch(() => {})
+  ]);
+
+  // لوحة "Command Center" هي الصفحة الافتراضية عند فتح الموقع (نشطة مباشرة في HTML)،
+  // لذا لا يوجد أي ضغطة قائمة تُشغّل تحديثها تلقائياً — وهذا كان يجعلها تظهر بأصفار
+  // دائماً حتى لو كانت البيانات الحقيقية محمّلة بنجاح. نستدعيها هنا يدوياً بعد
+  // اكتمال التحميل لضمان ظهور الأرقام الصحيحة من أول فتح للصفحة.
+  if (typeof loadCommandCenter === 'function') { try { loadCommandCenter(); } catch(e) {} }
 }
 
 // ══════════════════════════════════════════════════════
@@ -1793,11 +1884,20 @@ function populateClassFilter() {
 }
 
 // ── STUDENT SEARCH DROPDOWN ──────────────────────────
+// كان البحث يُعيد فلترة كل التلاميذ ويعيد بناء القائمة عند كل ضغطة حرف واحدة،
+// وهذا يسبب بطئاً ملحوظاً خصوصاً مع عدد كبير من التلاميذ. الآن ننتظر توقف
+// المستخدم عن الكتابة لفترة قصيرة جداً (120 ملي ثانية) قبل تنفيذ البحث فعلياً،
+// فيصبح الكتابة سلسة دون تقطيع.
+let _filterStudentDropdownTimer = null;
 function filterStudentDropdown() {
+  clearTimeout(_filterStudentDropdownTimer);
+  _filterStudentDropdownTimer = setTimeout(_runFilterStudentDropdown, 120);
+}
+function _runFilterStudentDropdown() {
   const q = document.getElementById('abs-search-student').value.trim().toLowerCase();
   const dd = document.getElementById('student-dropdown');
   if (!q) { dd.innerHTML=''; return; }
-  const matches = students.filter(s => s.name.toLowerCase().includes(q) || (s.massar||'').toLowerCase().includes(q)).slice(0,8);
+  const matches = students.filter(s => (s.name||'').toLowerCase().includes(q) || (s.massar||'').toLowerCase().includes(q)).slice(0,8);
   if (!matches.length) { dd.innerHTML='<div style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-size:13px;color:var(--text-muted)">لا نتائج</div>'; return; }
   dd.innerHTML = `<div style="position:absolute;z-index:50;background:var(--bg2);border:1px solid var(--border);border-radius:8px;width:100%;box-shadow:0 8px 24px rgba(0,0,0,.4);margin-top:4px">` +
     matches.map(s => `
@@ -12966,65 +13066,48 @@ async function loadTeachersForLogin() {
   }).join('');
 }
 
+// بيانات الدخول — يمكنك تغييرها هنا في أي وقت
+var SITE_LOGIN_USER = 'ahmed';
+var SITE_LOGIN_PWD  = 'wajhoo1975***';
+
 function doLogin() {
-  var pwd = document.getElementById('login-pwd').value;
-  var err = document.getElementById('login-err');
+  var user = document.getElementById('login-user').value.trim();
+  var pwd  = document.getElementById('login-pwd').value;
+  var err  = document.getElementById('login-err');
   err.style.display = 'none';
 
-  if (!_selectedRole) {
-    err.textContent = '⚠ اختر دورك أولاً';
-    err.style.display = 'block';
-    return;
-  }
-  if (!pwd) {
-    err.textContent = '⚠ أدخل رمز المرور';
+  if (!user || !pwd) {
+    err.textContent = '⚠ أدخل اسم المستخدم وكلمة السر';
     err.style.display = 'block';
     return;
   }
 
-  // للأستاذ: نبحث عن أستاذ بـ email + password المطابقين
-  var validPwd = false;
-  var matchedTid = null;
-  if (_selectedRole === 'teacher') {
-    var email = (document.getElementById('teacher-email-input').value||'').trim().toLowerCase();
-    if (!email) { err.textContent = '⚠ أدخل بريدك الإلكتروني'; err.style.display = 'block'; return; }
-    try {
-      var allExtra = JSON.parse(localStorage.getItem('teacher_extra')||'{}');
-      Object.keys(allExtra).forEach(function(tid) {
-        var ex = allExtra[tid] || {};
-        if ((ex.email||'').toLowerCase() === email && ex.password === pwd) {
-          validPwd = true;
-          matchedTid = tid;
-        }
-      });
-    } catch(e) {}
-    if (!validPwd) {
-      err.textContent = '❌ البريد أو كلمة المرور غير صحيحة';
-      err.style.display = 'block';
-      return;
-    }
-  } else {
-    if (pwd === getRolePwd(_selectedRole)) validPwd = true;
-    if (!validPwd) {
-      err.textContent = '❌ رمز المرور غير صحيح';
-      err.style.display = 'block';
-      return;
-    }
+  if (user !== SITE_LOGIN_USER || pwd !== SITE_LOGIN_PWD) {
+    err.textContent = '❌ اسم المستخدم أو كلمة السر غير صحيحة';
+    err.style.display = 'block';
+    return;
   }
 
-  var user = { role: _selectedRole, loginAt: Date.now() };
-  if (_selectedRole === 'teacher') user.teacherId = matchedTid;
-  if (_selectedRole === 'parent') {
-    var massar = document.getElementById('parent-massar').value.trim();
-    if (!massar) { err.textContent = '⚠ أدخل رقم مسار ابنك'; err.style.display = 'block'; return; }
-    user.massar = massar;
+  try { sessionStorage.setItem('sf_logged_in', '1'); } catch(e) {}
+  document.getElementById('login-screen').style.display = 'none';
+}
+
+// إظهار شاشة الدخول عند فتح الصفحة إن لم يكن المستخدم قد سجّل دخوله في هذه الجلسة
+(function() {
+  var already = false;
+  try { already = sessionStorage.getItem('sf_logged_in') === '1'; } catch(e) {}
+  if (!already) {
+    document.addEventListener('DOMContentLoaded', function() {
+      var ls = document.getElementById('login-screen');
+      if (ls) ls.style.display = 'flex';
+    });
   }
+})();
 
-  _currentUser = user;
-  try { sessionStorage.setItem('current_user', JSON.stringify(user)); } catch(e) {}
-
-  document.getElementById('login-screen').remove();
-  applyRolePermissions();
+function siteLogout() {
+  if (!confirm('🚪 تسجيل خروج؟')) return;
+  try { sessionStorage.removeItem('sf_logged_in'); } catch(e) {}
+  location.reload();
 }
 
 function applyRolePermissions() {
