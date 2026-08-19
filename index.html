@@ -24318,14 +24318,14 @@ function _globalSearch(q) {
   (students||[]).forEach(function(s){
     var name = (s.name||'').toLowerCase();
     if (name.includes(q) || (s.massar_code||'').toLowerCase().includes(q)) {
-      found.push({type:'👨‍🎓 تلميذ', label:s.name + ' — ' + (s.class||''), sub:s.massar_code||'', pageId:'students', filterName: s.name});
+      found.push({type:'👨‍🎓 تلميذ', label:s.name + ' — ' + (s.class||''), sub:s.massar_code||'', onclick:"openStudentProfile('"+s.id+"')"});
     }
   });
   // 2) الأساتذة
   (teachers||[]).forEach(function(t){
     var name = (t.name||'').toLowerCase();
     if (name.includes(q) || (t.subject||'').toLowerCase().includes(q)) {
-      found.push({type:'👨‍🏫 أستاذ', label:t.name + ' — ' + (t.subject||''), sub:t.phone||'', pageId:'teachers-list', filterName: t.name});
+      found.push({type:'👨‍🏫 أستاذ', label:t.name + ' — ' + (t.subject||''), sub:t.phone||'', onclick:"openTeacherDashboardFromRow('"+t.id+"')"});
     }
   });
   // 3) الأولياء (من الجدول guardians إن كان مُحمَّلاً)
