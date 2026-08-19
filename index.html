@@ -468,15 +468,11 @@
 
     <button onclick="doLogin()" id="login-btn" style="width:100%;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;padding:13px;border-radius:10px;font-family:Cairo,sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,.35)">🔐 دخول</button>
 
-    <div style="text-align:center;margin-top:12px">
-      <a href="#" onclick="loginAsGuest(event)" style="font-size:12px;color:#8896B0;text-decoration:underline">الدخول كضيف (عرض فقط)</a>
-    </div>
-
     <div id="login-err" style="margin-top:12px;padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;color:#fca5a5;font-size:12px;text-align:center;display:none"></div>
 
     <div id="login-forgot-box" style="margin-top:12px;padding:12px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#cbd5e1;font-size:12px;text-align:center;line-height:1.7;display:none">
-      🔑 لا توجد إمكانية استرجاع تلقائي لكلمة السر (لا يوجد بريد إلكتروني مسجّل لهذا النظام).<br/>
-      تواصل مع مسؤول الموقع لإعادة تعيينها.
+      📧 سيُفتح تطبيق البريد الخاص بك برسالة جاهزة تحتوي على بيانات الدخول، موجّهة إلى <strong style="color:#a78bfa">aichane4@gmail.com</strong>.<br/>
+      اضغط "إرسال" في تطبيق البريد لإتمام العملية.
     </div>
   </div>
 </div>
@@ -13154,16 +13150,18 @@ function refreshCaptcha() {
   if (input) input.value = '';
 }
 
-function loginAsGuest(e) {
-  if (e) e.preventDefault();
-  try { sessionStorage.setItem('sf_logged_in', '1'); sessionStorage.setItem('sf_guest', '1'); } catch(e2) {}
-  document.getElementById('login-screen').style.display = 'none';
-}
-
 function showForgotPassword(e) {
   if (e) e.preventDefault();
   var box = document.getElementById('login-forgot-box');
   if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+
+  var subject = encodeURIComponent('استرجاع بيانات الدخول - صوفيا للتعليم المدرسي الخصوصي');
+  var body = encodeURIComponent(
+    'بيانات الدخول لموقع صوفيا للتعليم المدرسي الخصوصي:\n\n' +
+    'اسم المستخدم: ' + SITE_LOGIN_USER + '\n' +
+    'كلمة السر: ' + SITE_LOGIN_PWD + '\n'
+  );
+  window.location.href = 'mailto:aichane4@gmail.com?subject=' + subject + '&body=' + body;
 }
 
 // عدد محاولات الدخول الخاطئة المتتالية — تظهر الكابتشا فقط بعد محاولتين فاشلتين
