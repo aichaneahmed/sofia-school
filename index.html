@@ -438,47 +438,71 @@
       <div style="font-size:22px;font-weight:900;color:#fff;letter-spacing:.5px">صوفيا للتعليم المدرسي الخصوصي</div>
     </div>
 
-    <div style="margin-bottom:16px">
-      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">اسم المستخدم :</label>
-      <input type="text" id="login-user" placeholder="أدخل اسم المستخدم" autocomplete="username" onkeypress="if(event.key==='Enter')document.getElementById('login-pwd').focus()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px"/>
-    </div>
+    <div id="login-step1">
+      <div style="margin-bottom:16px">
+        <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">اسم المستخدم :</label>
+        <input type="text" id="login-user" placeholder="أدخل اسم المستخدم" autocomplete="username" onkeypress="if(event.key==='Enter')document.getElementById('login-pwd').focus()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px"/>
+      </div>
 
-    <div style="margin-bottom:8px">
-      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">كلمة السر :</label>
-      <input type="password" id="login-pwd" placeholder="أدخل كلمة السر" autocomplete="current-password" onkeypress="if(event.key==='Enter')document.getElementById('login-captcha').focus()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px;letter-spacing:2px"/>
-    </div>
+      <div style="margin-bottom:8px">
+        <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">كلمة السر :</label>
+        <input type="password" id="login-pwd" placeholder="أدخل كلمة السر" autocomplete="current-password" onkeypress="if(event.key==='Enter')document.getElementById('login-captcha-check').focus()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px;letter-spacing:2px"/>
+      </div>
 
-    <div style="text-align:left;margin-bottom:16px">
-      <a href="#" onclick="showForgotPassword(event)" style="font-size:11px;color:#a78bfa;text-decoration:none">نسيت كلمة السر؟</a>
-    </div>
+      <div style="text-align:left;margin-bottom:16px">
+        <a href="#" onclick="showForgotPassword(event)" style="font-size:11px;color:#a78bfa;text-decoration:none">نسيت كلمة السر؟</a>
+      </div>
 
-    <div id="login-captcha-wrap" style="margin-bottom:18px">
-      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:8px;font-weight:600">التحقق الأمني :</label>
-      <div style="background:#f9f9f9;border:1px solid #d3d3d3;border-radius:6px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px">
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin:0">
-          <input type="checkbox" id="login-captcha-check" style="width:22px;height:22px;cursor:pointer;accent-color:#4CAF50"/>
-          <span style="color:#333;font-size:14px;font-weight:600;font-family:Cairo,sans-serif">لست روبوتاً</span>
-        </label>
-        <div style="text-align:center;font-size:9px;color:#999;line-height:1.4">
-          <div style="font-size:9px">reCAPTCHA</div>
-          <div>Privacy - Terms</div>
+      <div id="login-captcha-wrap" style="margin-bottom:18px">
+        <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:8px;font-weight:600">التحقق الأمني :</label>
+        <div style="background:#f9f9f9;border:1px solid #d3d3d3;border-radius:6px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin:0">
+            <input type="checkbox" id="login-captcha-check" style="width:22px;height:22px;cursor:pointer;accent-color:#4CAF50"/>
+            <span style="color:#333;font-size:14px;font-weight:600;font-family:Cairo,sans-serif">لست روبوتاً</span>
+          </label>
+          <div style="text-align:center;font-size:9px;color:#999;line-height:1.4">
+            <div style="font-size:9px">reCAPTCHA</div>
+            <div>Privacy - Terms</div>
+          </div>
         </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:18px">
+        <input type="checkbox" id="login-remember" style="width:16px;height:16px;cursor:pointer"/>
+        <label for="login-remember" style="font-size:12px;color:#cbd5e1;cursor:pointer;user-select:none">تذكّرني على هذا الجهاز</label>
+      </div>
+
+      <button onclick="doLogin()" id="login-btn" style="width:100%;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;padding:13px;border-radius:10px;font-family:Cairo,sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,.35)">🔐 دخول</button>
+
+      <div id="login-forgot-box" style="margin-top:12px;padding:12px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#cbd5e1;font-size:12px;text-align:center;line-height:1.7;display:none">
+        📧 سيُفتح تطبيق البريد الخاص بك برسالة جاهزة تحتوي على بيانات الدخول، موجّهة إلى <strong style="color:#a78bfa">aichane4@gmail.com</strong>.<br/>
+        اضغط "إرسال" في تطبيق البريد لإتمام العملية.
       </div>
     </div>
 
-    <div style="display:flex;align-items:center;gap:6px;margin-bottom:18px">
-      <input type="checkbox" id="login-remember" style="width:16px;height:16px;cursor:pointer"/>
-      <label for="login-remember" style="font-size:12px;color:#cbd5e1;cursor:pointer;user-select:none">تذكّرني على هذا الجهاز</label>
-    </div>
+    <div id="login-step2" style="display:none">
+      <div style="text-align:center;margin-bottom:18px">
+        <div style="font-size:34px;margin-bottom:8px">🔢</div>
+        <div style="font-size:14px;color:#cbd5e1;line-height:1.7">أدخل رمز التحقق الظاهر أدناه<br/><span style="font-size:11px;color:#8896B0">(وضع تجريبي — بدون خادم لإرسال SMS فعلي)</span></div>
+      </div>
 
-    <button onclick="doLogin()" id="login-btn" style="width:100%;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;padding:13px;border-radius:10px;font-family:Cairo,sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,.35)">🔐 دخول</button>
+      <div style="text-align:center;background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.4);border-radius:10px;padding:14px;margin-bottom:16px">
+        <div id="login-otp-display" style="font-size:30px;font-weight:900;color:#fff;letter-spacing:10px;font-family:'IBM Plex Mono',monospace"></div>
+      </div>
+
+      <div style="margin-bottom:18px">
+        <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">رمز التحقق :</label>
+        <input type="text" id="login-otp-input" inputmode="numeric" maxlength="6" placeholder="——————" onkeypress="if(event.key==='Enter')verifyOtp()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:20px;text-align:center;letter-spacing:8px"/>
+      </div>
+
+      <button onclick="verifyOtp()" style="width:100%;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;padding:13px;border-radius:10px;font-family:Cairo,sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,.35);margin-bottom:10px">✅ تأكيد الرمز</button>
+
+      <div style="text-align:center">
+        <a href="#" onclick="backToStep1(event)" style="font-size:12px;color:#8896B0;text-decoration:underline">↩ رجوع</a>
+      </div>
+    </div>
 
     <div id="login-err" style="margin-top:12px;padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;color:#fca5a5;font-size:12px;text-align:center;display:none"></div>
-
-    <div id="login-forgot-box" style="margin-top:12px;padding:12px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#cbd5e1;font-size:12px;text-align:center;line-height:1.7;display:none">
-      📧 سيُفتح تطبيق البريد الخاص بك برسالة جاهزة تحتوي على بيانات الدخول، موجّهة إلى <strong style="color:#a78bfa">aichane4@gmail.com</strong>.<br/>
-      اضغط "إرسال" في تطبيق البريد لإتمام العملية.
-    </div>
   </div>
 </div>
 
@@ -13147,11 +13171,49 @@ function doLogin() {
     return;
   }
 
+  // بيانات الدخول صحيحة — الانتقال لخطوة رمز التحقق (OTP) قبل السماح بالدخول فعلياً
+  _pendingRemember = remember;
+  var otp = String(Math.floor(100000 + Math.random() * 900000));
+  _otpCode = otp;
+  document.getElementById('login-otp-display').textContent = otp;
+  document.getElementById('login-otp-input').value = '';
+  document.getElementById('login-step1').style.display = 'none';
+  document.getElementById('login-step2').style.display = 'block';
+  document.getElementById('login-otp-input').focus();
+}
+
+var _otpCode = '';
+var _pendingRemember = false;
+
+function verifyOtp() {
+  var input = document.getElementById('login-otp-input').value.trim();
+  var err = document.getElementById('login-err');
+  err.style.display = 'none';
+
+  if (!input) {
+    err.textContent = '⚠ أدخل رمز التحقق';
+    err.style.display = 'block';
+    return;
+  }
+
+  if (input !== _otpCode) {
+    err.textContent = '❌ رمز التحقق غير صحيح';
+    err.style.display = 'block';
+    return;
+  }
+
   try {
-    if (remember) { localStorage.setItem('sf_logged_in', '1'); }
+    if (_pendingRemember) { localStorage.setItem('sf_logged_in', '1'); }
     else { sessionStorage.setItem('sf_logged_in', '1'); }
   } catch(e) {}
   document.getElementById('login-screen').style.display = 'none';
+}
+
+function backToStep1(e) {
+  if (e) e.preventDefault();
+  document.getElementById('login-err').style.display = 'none';
+  document.getElementById('login-step2').style.display = 'none';
+  document.getElementById('login-step1').style.display = 'block';
 }
 
 // إظهار شاشة الدخول عند فتح الصفحة إن لم يكن المستخدم قد سجّل دخوله من قبل
