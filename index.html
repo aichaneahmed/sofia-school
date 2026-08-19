@@ -443,14 +443,41 @@
       <input type="text" id="login-user" placeholder="أدخل اسم المستخدم" autocomplete="username" onkeypress="if(event.key==='Enter')document.getElementById('login-pwd').focus()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px"/>
     </div>
 
-    <div style="margin-bottom:18px">
+    <div style="margin-bottom:8px">
       <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">كلمة السر :</label>
-      <input type="password" id="login-pwd" placeholder="أدخل كلمة السر" autocomplete="current-password" onkeypress="if(event.key==='Enter')doLogin()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px;letter-spacing:2px"/>
+      <input type="password" id="login-pwd" placeholder="أدخل كلمة السر" autocomplete="current-password" onkeypress="if(event.key==='Enter')document.getElementById('login-captcha').focus()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px;letter-spacing:2px"/>
+    </div>
+
+    <div style="text-align:left;margin-bottom:16px">
+      <a href="#" onclick="showForgotPassword(event)" style="font-size:11px;color:#a78bfa;text-decoration:none">نسيت كلمة السر؟</a>
+    </div>
+
+    <div id="login-captcha-wrap" style="margin-bottom:18px;display:none">
+      <label style="font-size:12px;color:#cbd5e1;display:block;margin-bottom:6px;font-weight:600">أدخل الرمز الظاهر في الصورة :</label>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <canvas id="login-captcha-canvas" width="150" height="46" style="border-radius:8px;cursor:pointer" onclick="refreshCaptcha()" title="اضغط للتحديث"></canvas>
+        <button type="button" onclick="refreshCaptcha()" title="تحديث الصورة" style="background:transparent;border:1px solid #444;color:#cbd5e1;border-radius:8px;padding:0 12px;height:46px;cursor:pointer;font-size:16px">🔄</button>
+      </div>
+      <input type="text" id="login-captcha" placeholder="الرمز الذي تراه أعلاه" autocomplete="off" onkeypress="if(event.key==='Enter')doLogin()" style="width:100%;background:rgba(0,0,0,.3);border:1px solid #444;border-radius:8px;padding:11px 14px;color:#fff;font-family:Cairo,sans-serif;font-size:14px;text-align:center"/>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:18px">
+      <input type="checkbox" id="login-remember" style="width:16px;height:16px;cursor:pointer"/>
+      <label for="login-remember" style="font-size:12px;color:#cbd5e1;cursor:pointer;user-select:none">تذكّرني على هذا الجهاز</label>
     </div>
 
     <button onclick="doLogin()" id="login-btn" style="width:100%;background:linear-gradient(135deg,#8B5CF6,#EC4899);color:#fff;border:none;padding:13px;border-radius:10px;font-family:Cairo,sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 6px 20px rgba(139,92,246,.35)">🔐 دخول</button>
 
+    <div style="text-align:center;margin-top:12px">
+      <a href="#" onclick="loginAsGuest(event)" style="font-size:12px;color:#8896B0;text-decoration:underline">الدخول كضيف (عرض فقط)</a>
+    </div>
+
     <div id="login-err" style="margin-top:12px;padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;color:#fca5a5;font-size:12px;text-align:center;display:none"></div>
+
+    <div id="login-forgot-box" style="margin-top:12px;padding:12px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#cbd5e1;font-size:12px;text-align:center;line-height:1.7;display:none">
+      🔑 لا توجد إمكانية استرجاع تلقائي لكلمة السر (لا يوجد بريد إلكتروني مسجّل لهذا النظام).<br/>
+      تواصل مع مسؤول الموقع لإعادة تعيينها.
+    </div>
   </div>
 </div>
 
@@ -13070,10 +13097,84 @@ async function loadTeachersForLogin() {
 var SITE_LOGIN_USER = 'ahmed';
 var SITE_LOGIN_PWD  = 'wajhoo1975***';
 
+// ══════════════════════════════════════════════════════
+// CAPTCHA (نص مشوَّه مرسوم بـ canvas — لا يحتاج أي خدمة خارجية)
+// ══════════════════════════════════════════════════════
+var _captchaText = '';
+function refreshCaptcha() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var text = '';
+  for (var i = 0; i < 5; i++) text += chars[Math.floor(Math.random() * chars.length)];
+  _captchaText = text;
+
+  var cv = document.getElementById('login-captcha-canvas');
+  if (!cv) return;
+  var ctx = cv.getContext('2d');
+  var w = cv.width, h = cv.height;
+
+  // خلفية
+  ctx.fillStyle = '#1D2032';
+  ctx.fillRect(0, 0, w, h);
+
+  // بقع ملوّنة عشوائية (تشويش بصري)
+  for (var s = 0; s < 25; s++) {
+    ctx.fillStyle = 'rgba(' + Math.floor(Math.random()*255) + ',' + Math.floor(Math.random()*255) + ',' + Math.floor(Math.random()*255) + ',0.35)';
+    ctx.beginPath();
+    ctx.arc(Math.random()*w, Math.random()*h, Math.random()*6+2, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // خطوط تشويش
+  for (var l = 0; l < 5; l++) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(Math.random()*w, Math.random()*h);
+    ctx.lineTo(Math.random()*w, Math.random()*h);
+    ctx.stroke();
+  }
+
+  // الحروف نفسها، كل حرف بزاوية ولون مختلفين
+  var charW = w / (text.length + 1);
+  for (var c = 0; c < text.length; c++) {
+    ctx.save();
+    var x = charW * (c + 0.9);
+    var y = h/2 + (Math.random()*10 - 5);
+    ctx.translate(x, y);
+    ctx.rotate((Math.random() * 0.5 - 0.25));
+    ctx.font = 'bold ' + (h*0.55) + 'px monospace';
+    ctx.fillStyle = '#EEF1F8';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text[c], 0, 0);
+    ctx.restore();
+  }
+
+  var input = document.getElementById('login-captcha');
+  if (input) input.value = '';
+}
+
+function loginAsGuest(e) {
+  if (e) e.preventDefault();
+  try { sessionStorage.setItem('sf_logged_in', '1'); sessionStorage.setItem('sf_guest', '1'); } catch(e2) {}
+  document.getElementById('login-screen').style.display = 'none';
+}
+
+function showForgotPassword(e) {
+  if (e) e.preventDefault();
+  var box = document.getElementById('login-forgot-box');
+  if (box) box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+// عدد محاولات الدخول الخاطئة المتتالية — تظهر الكابتشا فقط بعد محاولتين فاشلتين
+var _loginFailCount = 0;
+
 function doLogin() {
   var user = document.getElementById('login-user').value.trim();
   var pwd  = document.getElementById('login-pwd').value;
+  var remember = document.getElementById('login-remember').checked;
   var err  = document.getElementById('login-err');
+  var captchaVisible = document.getElementById('login-captcha-wrap').style.display !== 'none';
   err.style.display = 'none';
 
   if (!user || !pwd) {
@@ -13082,31 +13183,59 @@ function doLogin() {
     return;
   }
 
+  if (captchaVisible) {
+    var captchaInput = document.getElementById('login-captcha').value.trim();
+    if (!captchaInput) {
+      err.textContent = '⚠ أدخل الرمز الظاهر في الصورة';
+      err.style.display = 'block';
+      return;
+    }
+    if (captchaInput.toUpperCase() !== _captchaText.toUpperCase()) {
+      err.textContent = '❌ الرمز الأمني غير صحيح';
+      err.style.display = 'block';
+      refreshCaptcha();
+      return;
+    }
+  }
+
   if (user !== SITE_LOGIN_USER || pwd !== SITE_LOGIN_PWD) {
-    err.textContent = '❌ اسم المستخدم أو كلمة السر غير صحيحة';
+    _loginFailCount++;
+    if (_loginFailCount >= 2) {
+      var wrap = document.getElementById('login-captcha-wrap');
+      if (wrap.style.display === 'none') { wrap.style.display = 'block'; refreshCaptcha(); }
+      else { refreshCaptcha(); }
+      err.textContent = '❌ اسم المستخدم أو كلمة السر غير صحيحة — أدخل الرمز الأمني أدناه للمحاولة التالية';
+    } else {
+      err.textContent = '❌ اسم المستخدم أو كلمة السر غير صحيحة';
+    }
     err.style.display = 'block';
     return;
   }
 
-  try { sessionStorage.setItem('sf_logged_in', '1'); } catch(e) {}
+  _loginFailCount = 0;
+  try {
+    if (remember) { localStorage.setItem('sf_logged_in', '1'); }
+    else { sessionStorage.setItem('sf_logged_in', '1'); }
+  } catch(e) {}
   document.getElementById('login-screen').style.display = 'none';
 }
 
-// إظهار شاشة الدخول عند فتح الصفحة إن لم يكن المستخدم قد سجّل دخوله في هذه الجلسة
+// إظهار شاشة الدخول عند فتح الصفحة إن لم يكن المستخدم قد سجّل دخوله من قبل
+// ("تذكّرني" يُخزَّن بشكل دائم في localStorage، وإلا يُخزَّن للجلسة الحالية فقط في sessionStorage)
 (function() {
   var already = false;
-  try { already = sessionStorage.getItem('sf_logged_in') === '1'; } catch(e) {}
+  try { already = sessionStorage.getItem('sf_logged_in') === '1' || localStorage.getItem('sf_logged_in') === '1'; } catch(e) {}
   if (!already) {
     document.addEventListener('DOMContentLoaded', function() {
       var ls = document.getElementById('login-screen');
-      if (ls) ls.style.display = 'flex';
+      if (ls) { ls.style.display = 'flex'; refreshCaptcha(); }
     });
   }
 })();
 
 function siteLogout() {
   if (!confirm('🚪 تسجيل خروج؟')) return;
-  try { sessionStorage.removeItem('sf_logged_in'); } catch(e) {}
+  try { sessionStorage.removeItem('sf_logged_in'); sessionStorage.removeItem('sf_guest'); localStorage.removeItem('sf_logged_in'); } catch(e) {}
   location.reload();
 }
 
